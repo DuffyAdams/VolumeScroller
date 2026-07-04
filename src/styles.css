@@ -123,6 +123,16 @@ button {
   filter: blur(0);
 }
 
+.shell.is-leaving {
+  opacity: 0;
+  transform: translateY(calc(var(--shell-transition-y) * 1.45)) scale(0.94);
+  filter: blur(8px);
+  transition:
+    opacity 320ms ease,
+    transform 380ms cubic-bezier(0.7, 0, 0.84, 0),
+    filter 320ms ease;
+}
+
 .volume-card {
   position: relative;
   width: min(100%, var(--card-width));
@@ -345,6 +355,13 @@ button {
 
 .settings-header-icon svg {
   display: block;
+}
+
+.settings-header-icon img {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .eyebrow {

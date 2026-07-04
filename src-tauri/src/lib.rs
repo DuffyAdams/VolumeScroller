@@ -144,9 +144,18 @@ fn save_preferences(
 #[tauri::command]
 fn preview_preferences(
     app_handle: AppHandle,
+    state: State<'_, AppState>,
     preferences: Preferences,
 ) -> Result<Preferences, String> {
     let preferences = normalize_preferences(preferences);
+
+    {
+        let mut stored_preferences = state
+            .preferences
+            .lock()
+            .map_err(|error| error.to_string())?;
+        *stored_preferences = preferences.clone();
+    }
 
     position_overlay(&app_handle, &preferences);
     let _ = app_handle.emit("preferences-preview", preferences.clone());
@@ -449,6 +458,50 @@ fn scroll_direction(preferences: &Preferences, raw_direction: i32) -> i32 {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn scroll_direction_inverts_when_down_increases() {
+        let mut preferences = Preferences::default();
+
+        preferences.scroll_direction = "upIncreases".into();
+        assert_eq!(scroll_direction(&preferences, 1), 1);
+        assert_eq!(scroll_direction(&preferences, -1), -1);
+
+        preferences.scroll_direction = "downIncreases".into();
+        assert_eq!(scroll_direction(&preferences, 1), -1);
+        assert_eq!(scroll_direction(&preferences, -1), 1);
+    }
+
+    #[test]
+    fn normalize_preferences_clamps_scroll_increment() {
+        let mut preferences = Preferences::default();
+
+        preferences.scroll_increment = 100.0;
+        assert_eq!(normalize_preferences(preferences.clone()).scroll_increment, 25.0);
+
+        preferences.scroll_increment = 0.0;
+        assert_eq!(normalize_preferences(preferences).scroll_increment, 0.5);
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn startup_command_quotes_exe_and_preserves_minimized_flag() {
+        let exe_path = std::path::Path::new(r"C:\Program Files\Volume Scroller\Volume Scroller.exe");
+
+        assert_eq!(
+            startup_command(exe_path, true),
+            r#""C:\Program Files\Volume Scroller\Volume Scroller.exe" --minimized"#
+        );
+        assert_eq!(
+            startup_command(exe_path, false),
+            r#""C:\Program Files\Volume Scroller\Volume Scroller.exe""#
+        );
+    }
+}
+
 #[cfg(windows)]
 fn sync_launch_at_startup(
     _app_handle: &AppHandle,
@@ -464,11 +517,7 @@ fn sync_launch_at_startup(
 
     if preferences.launch_at_startup {
         let exe_path = env::current_exe().map_err(|error| error.to_string())?;
-        let mut command = format!("\"{}\"", exe_path.display());
-
-        if preferences.start_minimized_to_tray {
-            command.push_str(" --minimized");
-        }
+        let command = startup_command(&exe_path, preferences.start_minimized_to_tray);
 
         run_key
             .set_value(STARTUP_REGISTRY_NAME, &command)
@@ -480,6 +529,17 @@ fn sync_launch_at_startup(
             Err(error) => Err(error.to_string()),
         }
     }
+}
+
+#[cfg(windows)]
+fn startup_command(exe_path: &std::path::Path, start_minimized_to_tray: bool) -> String {
+    let mut command = format!("\"{}\"", exe_path.display());
+
+    if start_minimized_to_tray {
+        command.push_str(" --minimized");
+    }
+
+    command
 }
 
 #[cfg(not(windows))]

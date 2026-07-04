@@ -4,9 +4,9 @@ Volume Scroller is a lightweight Windows desktop utility that lets you adjust sy
 
 ## Screenshots
 
-| Taskbar Overlay | Overlay Close-Up |
-| --- | --- |
-| ![Volume Scroller taskbar overlay](Screenshots/taskbar-volume-overlay.png) | ![Volume Scroller close-up overlay](Screenshots/volume-overlay-closeup.png) |
+| Taskbar Overlay | Overlay Close-Up | Settings Window |
+| --- | --- | --- |
+| ![Volume Scroller taskbar overlay](Screenshots/taskbar-volume-overlay.png) | ![Volume Scroller close-up overlay](Screenshots/volume-overlay-closeup.png) | ![Volume Scroller settings window](Screenshots/settings-window.png) |
 
 ## Features
 

@@ -43,6 +43,7 @@ const isTauri = "__TAURI_INTERNALS__" in window;
 const currentWindowLabel = isTauri ? getCurrentWindow().label : "main";
 const isSettingsWindow = currentWindowLabel === "settings";
 const segmentCount = 12;
+const taskbarIconSrc = "/taskbar-icon.ico";
 const defaultPreferences: Preferences = {
   scrollerEnabled: true,
   launchAtStartup: false,
@@ -200,22 +201,45 @@ function OverlayView({ preferences }: { preferences: Preferences }) {
   const [volume, setVolume] = useState(42);
   const [muted, setMuted] = useState(false);
   const [direction, setDirection] = useState(0);
-  const [visible, setVisible] = useState(!isTauri);
+  const [overlayPhase, setOverlayPhase] = useState<"hidden" | "visible" | "leaving">(!isTauri ? "visible" : "hidden");
+  const [animationTick, setAnimationTick] = useState(0);
   const volumeRef = useRef(volume);
   const hideTimer = useRef<number>();
+  const exitTimer = useRef<number>();
+  const visible = overlayPhase === "visible";
 
   const activeSegments = muted ? 0 : Math.round((volume / 100) * segmentCount);
   const volumeIcon = muted || volume === 0 ? volumeIcons.muted : volume < 55 ? volumeIcons.low : volumeIcons.high;
 
+  function finishHide() {
+    setOverlayPhase(isTauri ? "hidden" : "visible");
+  }
+
+  function scheduleHide() {
+    window.clearTimeout(hideTimer.current);
+    window.clearTimeout(exitTimer.current);
+
+    hideTimer.current = window.setTimeout(() => {
+      if (!isTauri) {
+        return;
+      }
+
+      setOverlayPhase("leaving");
+      exitTimer.current = window.setTimeout(finishHide, 380);
+    }, 1450);
+  }
+
   function reveal(payload: VolumePayload) {
     window.clearTimeout(hideTimer.current);
+    window.clearTimeout(exitTimer.current);
     const nextVolume = clamp(Math.round(payload.volume), 0, 100);
     volumeRef.current = nextVolume;
     setVolume(nextVolume);
     setMuted(payload.muted);
     setDirection(payload.direction);
-    setVisible(true);
-    hideTimer.current = window.setTimeout(() => setVisible(!isTauri), 1450);
+    setAnimationTick((current) => current + 1);
+    setOverlayPhase("visible");
+    scheduleHide();
   }
 
   useLayoutEffect(() => {
@@ -262,6 +286,7 @@ function OverlayView({ preferences }: { preferences: Preferences }) {
 
     return () => {
       window.clearTimeout(hideTimer.current);
+      window.clearTimeout(exitTimer.current);
       unlisten();
     };
   }, []);
@@ -272,6 +297,7 @@ function OverlayView({ preferences }: { preferences: Preferences }) {
     }
 
     window.clearTimeout(hideTimer.current);
+    window.clearTimeout(exitTimer.current);
   }
 
   function resumeHideTimer() {
@@ -279,12 +305,14 @@ function OverlayView({ preferences }: { preferences: Preferences }) {
       return;
     }
 
-    hideTimer.current = window.setTimeout(() => setVisible(!isTauri), 1450);
+    scheduleHide();
   }
 
   return (
     <main
-      className={`shell theme-${preferences.theme} ${visible ? "is-visible" : ""}`}
+      className={`shell theme-${preferences.theme} ${overlayPhase === "visible" ? "is-visible" : ""} ${
+        overlayPhase === "leaving" ? "is-leaving" : ""
+      }`}
       onMouseEnter={pauseHideTimer}
       onMouseLeave={resumeHideTimer}
     >
@@ -293,6 +321,7 @@ function OverlayView({ preferences }: { preferences: Preferences }) {
           <Icon icon={volumeIcon} width="100%" height="100%" />
         </div>
         <div
+          key={animationTick}
           className={`segments ${direction > 0 ? "nudging-up" : direction < 0 ? "nudging-down" : ""}`}
           aria-hidden="true"
         >
@@ -388,7 +417,7 @@ function SettingsView({
             <h1>Volume Scroller</h1>
           </div>
           <div className="settings-header-icon" aria-hidden="true">
-            <Icon icon={volumeIcons.waveform} width="28" height="28" />
+            <img src={taskbarIconSrc} alt="" />
           </div>
         </header>
 

@@ -1,6 +1,6 @@
 [package]
 name = "volume-scroller"
-version = "0.1.0"
+version = "0.1.1"
 description = "Scroll on the Windows taskbar to adjust system volume."
 authors = ["Duffy"]
 edition = "2021"
