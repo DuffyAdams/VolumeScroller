@@ -882,6 +882,29 @@ function TaskbarDemo() {
   );
 }
 
+function VolumeScrollerBarDemo() {
+  const activeBars = 10;
+  const volumeBars = Array.from({ length: 13 }, (_, index) => index);
+
+  return (
+    <div className="volume-scroll-preview" aria-label="Volume Scroller volume indicator preview">
+      <div className="volume-scroll-pill">
+        <span className="volume-scroll-icon" aria-hidden="true">
+          <VolumeGlyph size={34} strokeWidth={1.8} />
+        </span>
+
+        <div className="volume-scroll-bars" aria-hidden="true">
+          {volumeBars.map((barIndex) => (
+            <span key={barIndex} className={barIndex < activeBars ? "active" : ""} />
+          ))}
+        </div>
+
+        <span className="volume-scroll-percent">76%</span>
+      </div>
+    </div>
+  );
+}
+
 function WifiGlyph() {
   return (
     <svg
@@ -964,10 +987,10 @@ const screenshotItems = [
     demo: true
   },
   {
-    src: "/screenshots/volume-overlay-closeup.png",
-    alt: "Close-up of the rounded Volume Scroller volume overlay",
+    alt: "Volume Scroller volume indicator bar preview",
     title: "Clean, glanceable feedback",
-    copy: "A compact always-on-top indicator shows volume level without stealing your focus."
+    copy: "A compact overlay shows the volume level without stealing your focus.",
+    barDemo: true
   },
   {
     src: "/screenshots/settings-window.png",
@@ -987,13 +1010,15 @@ const featureItems = [
 ];
 
 function LandingPage() {
+  const [landingTheme, setLandingTheme] = useState<ThemeName>("monochrome");
+
   useEffect(() => {
     document.documentElement.classList.add("site-document");
     return () => document.documentElement.classList.remove("site-document");
   }, []);
 
   return (
-    <main className="site">
+    <main className={`site theme-${landingTheme}`}>
       <header className="site-nav" aria-label="Primary">
         <a className="brand" href="#top" aria-label="Volume Scroller home">
           <span className="brand-mark" aria-hidden="true">
@@ -1079,8 +1104,8 @@ function LandingPage() {
         <div className="screenshot-grid">
           {screenshotItems.map((item) => (
             <article className="screenshot-card" key={item.title}>
-              {"demo" in item ? <TaskbarDemo /> : <img src={item.src} alt={item.alt} />}
-              <div>
+              {"demo" in item ? <TaskbarDemo /> : "barDemo" in item ? <VolumeScrollerBarDemo /> : <img src={item.src} alt={item.alt} />}
+              <div className="screenshot-card-copy">
                 <h3>{item.title}</h3>
                 <p>{item.copy}</p>
               </div>
@@ -1094,16 +1119,25 @@ function LandingPage() {
           <p className="eyebrow">Palettes</p>
           <h2>Monochrome by default, with presets when you want them.</h2>
         </div>
-        <div className="palette-row">
+        <div className="palette-row" role="radiogroup" aria-label="Preview page theme">
           {themeOptions.map((option) => (
-            <span className={`palette-chip theme-swatch-${option.value}`} key={option.value}>
+            <button
+              className={`palette-chip theme-swatch-${option.value} ${
+                option.value === landingTheme ? "is-selected" : ""
+              }`}
+              key={option.value}
+              type="button"
+              role="radio"
+              aria-checked={option.value === landingTheme}
+              onClick={() => setLandingTheme(option.value)}
+            >
               <span className="theme-swatch" aria-hidden="true">
                 <span />
                 <span />
                 <span />
               </span>
               {option.label}
-            </span>
+            </button>
           ))}
         </div>
       </section>

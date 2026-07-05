@@ -856,12 +856,106 @@ html.site-document a {
   --site-black: #111111;
   --site-blue: #0f6cbd;
   --site-orange: #e95420;
+  --site-button-hover: #0a5fa8;
+  --site-button-glow: rgba(15, 108, 189, 0.16);
+  --site-button-glow-strong: rgba(15, 108, 189, 0.26);
+  --site-icon-bg: #3d3d3d;
+  --site-overlay-bg: rgba(11, 16, 36, 0.56);
+  --site-overlay-accent: rgba(255, 255, 255, 0.96);
+  --site-demo-field: #0f172a;
+  --site-demo-edge: #111827;
+  --site-demo-grid: rgba(255, 255, 255, 0.04);
+  --site-wallpaper-a: rgba(92, 195, 255, 0.95);
+  --site-wallpaper-b: rgba(22, 93, 255, 0.95);
+  --site-wallpaper-c: rgba(38, 175, 255, 0.8);
+  --site-wallpaper-d: rgba(5, 43, 165, 0.92);
   min-height: 100vh;
   color: var(--site-ink);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 310px),
     var(--site-bg);
   font-family: var(--theme-font-monochrome);
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+
+.site.theme-windows11 {
+  --site-bg: #f4f8fd;
+  --site-ink: #1f1f1f;
+  --site-muted: #586575;
+  --site-rule: #cad8e7;
+  --site-soft: #e8f1fb;
+  --site-panel: #ffffff;
+  --site-black: #202020;
+  --site-blue: #0f6cbd;
+  --site-orange: #5cc8ff;
+  --site-button-hover: #0a5fa8;
+  --site-button-glow: rgba(15, 108, 189, 0.17);
+  --site-button-glow-strong: rgba(15, 108, 189, 0.28);
+  --site-icon-bg: #0f6cbd;
+  --site-overlay-bg: rgba(255, 255, 255, 0.8);
+  --site-overlay-accent: #0f6cbd;
+  --site-demo-field: #eaf5ff;
+  --site-demo-edge: #cfe8fa;
+  --site-demo-grid: rgba(15, 108, 189, 0.08);
+  --site-wallpaper-a: rgba(110, 231, 255, 0.95);
+  --site-wallpaper-b: rgba(14, 165, 233, 0.9);
+  --site-wallpaper-c: rgba(56, 189, 248, 0.76);
+  --site-wallpaper-d: rgba(15, 108, 189, 0.84);
+  font-family: var(--theme-font-windows11);
+}
+
+.site.theme-ubuntu {
+  --site-bg: #2c001e;
+  --site-ink: #fff8f2;
+  --site-muted: #ebc8bb;
+  --site-rule: #8f315a;
+  --site-soft: #451039;
+  --site-panel: #3a0a2b;
+  --site-black: #1d0014;
+  --site-blue: #e95420;
+  --site-orange: #f6a35c;
+  --site-button-hover: #c7461c;
+  --site-button-glow: rgba(233, 84, 32, 0.2);
+  --site-button-glow-strong: rgba(233, 84, 32, 0.34);
+  --site-icon-bg: #e95420;
+  --site-overlay-bg: rgba(44, 0, 30, 0.78);
+  --site-overlay-accent: #e95420;
+  --site-demo-field: #2c001e;
+  --site-demo-edge: #5e2750;
+  --site-demo-grid: rgba(255, 248, 242, 0.06);
+  --site-wallpaper-a: rgba(233, 84, 32, 0.96);
+  --site-wallpaper-b: rgba(119, 41, 83, 0.92);
+  --site-wallpaper-c: rgba(246, 163, 92, 0.76);
+  --site-wallpaper-d: rgba(44, 0, 30, 0.9);
+  font-family: var(--theme-font-ubuntu);
+}
+
+.site.theme-solarized {
+  --site-bg: #fdf6e3;
+  --site-ink: #073642;
+  --site-muted: #586e75;
+  --site-rule: #d7ceb2;
+  --site-soft: #eee8d5;
+  --site-panel: #fffaf0;
+  --site-black: #002b36;
+  --site-blue: #268bd2;
+  --site-orange: #cb4b16;
+  --site-button-hover: #1f78b7;
+  --site-button-glow: rgba(38, 139, 210, 0.18);
+  --site-button-glow-strong: rgba(38, 139, 210, 0.3);
+  --site-icon-bg: #002b36;
+  --site-overlay-bg: rgba(0, 43, 54, 0.78);
+  --site-overlay-accent: #268bd2;
+  --site-demo-field: #073642;
+  --site-demo-edge: #002b36;
+  --site-demo-grid: rgba(238, 232, 213, 0.08);
+  --site-wallpaper-a: rgba(38, 139, 210, 0.88);
+  --site-wallpaper-b: rgba(42, 161, 152, 0.86);
+  --site-wallpaper-c: rgba(181, 137, 0, 0.58);
+  --site-wallpaper-d: rgba(0, 43, 54, 0.9);
+  font-family: var(--theme-font-solarized);
 }
 
 .site a {
@@ -955,7 +1049,7 @@ html.site-document a {
   border: 4px solid var(--site-ink);
   border-radius: 999px;
   color: #ffffff;
-  background: #3d3d3d;
+  background: var(--site-icon-bg);
   box-shadow:
     inset 0 0 0 7px rgba(255, 255, 255, 0.1),
     7px 8px 0 var(--site-ink);
@@ -1014,7 +1108,7 @@ html.site-document a {
   background: var(--site-blue);
   box-shadow:
     6px 6px 0 var(--site-ink),
-    0 0 0 4px rgba(15, 108, 189, 0.16);
+    0 0 0 4px var(--site-button-glow);
   font-size: 20px;
   font-weight: 900;
   letter-spacing: 0;
@@ -1032,12 +1126,12 @@ html.site-document a {
 
 .download-button:hover,
 .download-button:focus-visible {
-  background: #0a5fa8;
+  background: var(--site-button-hover);
   transform: translate(-2px, -2px);
-  outline: 4px solid rgba(15, 108, 189, 0.26);
+  outline: 4px solid var(--site-button-glow-strong);
   box-shadow:
     8px 8px 0 var(--site-ink),
-    0 0 0 5px rgba(15, 108, 189, 0.18);
+    0 0 0 5px var(--site-button-glow);
 }
 
 .text-link {
@@ -1068,8 +1162,8 @@ html.site-document a {
   border-radius: 8px;
   color: #ffffff;
   background:
-    radial-gradient(circle at 74% 22%, rgba(56, 189, 248, 0.22), transparent 30%),
-    linear-gradient(145deg, #0f172a 0%, #111827 46%, #18181b 100%);
+    radial-gradient(circle at 74% 22%, color-mix(in srgb, var(--site-blue) 24%, transparent), transparent 30%),
+    linear-gradient(145deg, var(--site-demo-field) 0%, var(--site-demo-edge) 46%, var(--site-black) 100%);
   box-shadow: 7px 8px 0 var(--site-ink);
 }
 
@@ -1359,8 +1453,8 @@ html.site-document a {
 
 .taskbar-demo.volume-demo {
   background:
-    radial-gradient(circle at 74% 22%, rgba(56, 189, 248, 0.22), transparent 30%),
-    linear-gradient(145deg, #0f172a 0%, #111827 46%, #18181b 100%);
+    radial-gradient(circle at 74% 22%, color-mix(in srgb, var(--site-blue) 24%, transparent), transparent 30%),
+    linear-gradient(145deg, var(--site-demo-field) 0%, var(--site-demo-edge) 46%, var(--site-black) 100%);
 }
 
 .taskbar-demo.volume-demo::before {
@@ -1369,8 +1463,8 @@ html.site-document a {
   inset: 0 0 24%;
   z-index: 1;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(var(--site-demo-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-demo-grid) 1px, transparent 1px);
   background-size: 28px 28px;
   mask-image: linear-gradient(to bottom, black, transparent 74%);
 }
@@ -1380,25 +1474,25 @@ html.site-document a {
   inset: -8%;
   z-index: 0;
   background:
-    radial-gradient(ellipse at 52% 46%, rgba(92, 195, 255, 0.95) 0 7%, transparent 18%),
-    radial-gradient(ellipse at 58% 30%, rgba(22, 93, 255, 0.95) 0 24%, transparent 47%),
-    radial-gradient(ellipse at 37% 52%, rgba(38, 175, 255, 0.8) 0 18%, transparent 43%),
-    radial-gradient(ellipse at 66% 67%, rgba(5, 43, 165, 0.92) 0 21%, transparent 48%),
+    radial-gradient(ellipse at 52% 46%, var(--site-wallpaper-a) 0 7%, transparent 18%),
+    radial-gradient(ellipse at 58% 30%, var(--site-wallpaper-b) 0 24%, transparent 47%),
+    radial-gradient(ellipse at 37% 52%, var(--site-wallpaper-c) 0 18%, transparent 43%),
+    radial-gradient(ellipse at 66% 67%, var(--site-wallpaper-d) 0 21%, transparent 48%),
     conic-gradient(
       from 218deg at 52% 46%,
       transparent 0 10deg,
-      rgba(91, 196, 255, 0.8) 12deg 24deg,
-      rgba(24, 75, 255, 0.88) 32deg 80deg,
+      var(--site-wallpaper-a) 12deg 24deg,
+      var(--site-wallpaper-b) 32deg 80deg,
       transparent 96deg 360deg
     ),
     conic-gradient(
       from 31deg at 53% 48%,
       transparent 0 30deg,
-      rgba(55, 148, 255, 0.7) 42deg 82deg,
-      rgba(5, 28, 127, 0.88) 94deg 128deg,
+      var(--site-wallpaper-c) 42deg 82deg,
+      var(--site-wallpaper-d) 94deg 128deg,
       transparent 150deg 360deg
     ),
-    linear-gradient(145deg, #06101e 0%, #07172a 55%, #020712 100%);
+    linear-gradient(145deg, var(--site-demo-edge) 0%, var(--site-demo-field) 55%, var(--site-black) 100%);
   filter: blur(8px) saturate(1.25);
   opacity: 0.76;
   transform: scale(1.1) rotate(-7deg);
@@ -1645,7 +1739,7 @@ html.site-document a {
   padding-inline: clamp(0.55rem, 2vw, 1rem);
   border-radius: 999px;
   opacity: 0;
-  background: rgba(11, 16, 36, 0.56);
+  background: var(--site-overlay-bg);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
   pointer-events: none;
   backdrop-filter: blur(12px);
@@ -1699,7 +1793,7 @@ html.site-document a {
 }
 
 .taskbar-demo .volume-bar.active {
-  background: rgba(255, 255, 255, 0.96);
+  background: var(--site-overlay-accent);
   box-shadow:
     0 0 8px rgba(255, 255, 255, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
@@ -1816,7 +1910,7 @@ html.site-document a {
   border: 2px solid var(--site-ink);
   border-radius: 8px;
   color: #ffffff;
-  background: #3d3d3d;
+  background: var(--site-icon-bg);
 }
 
 .feature-card h3,
@@ -1845,19 +1939,222 @@ html.site-document a {
   border-bottom: 2px solid var(--site-ink);
 }
 
+.volume-scroll-preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  padding: 1.35rem;
+  border-bottom: 2px solid var(--site-ink);
+  background:
+    radial-gradient(circle at 36% 38%, rgba(56, 189, 248, 0.3), transparent 32%),
+    linear-gradient(145deg, #0f172a 0%, #172554 48%, #0f172a 100%);
+}
+
+.volume-scroll-pill {
+  width: min(88%, 15.75rem);
+  height: 3.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.48rem;
+  padding-inline: 0.82rem;
+  border-radius: 999px;
+  color: #ffffff;
+  background: rgba(11, 16, 36, 0.56);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(12px);
+}
+
+.volume-scroll-icon {
+  width: 1.55rem;
+  height: 1.55rem;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.volume-scroll-icon svg {
+  width: 1.55rem;
+  height: 1.55rem;
+}
+
+.volume-scroll-bars {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.34rem;
+}
+
+.volume-scroll-bars span {
+  width: 0.3rem;
+  height: 1.45rem;
+  flex: 1 1 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.26);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transform: scaleY(0.72);
+  transform-origin: bottom;
+}
+
+.volume-scroll-bars span.active {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: scaleY(1);
+}
+
+.volume-scroll-percent {
+  min-width: 2.35rem;
+  color: #ffffff;
+  font-family: var(--theme-font-windows11);
+  font-size: 0.96rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: right;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
 .screenshot-card .taskbar-demo {
+  aspect-ratio: 16 / 9;
   border: 0;
   border-bottom: 2px solid var(--site-ink);
   border-radius: 0;
   box-shadow: none;
 }
 
-.screenshot-card:nth-child(2) img {
-  object-fit: contain;
-  padding: 16px;
+.screenshot-card .taskbar-demo .demo-cue {
+  left: 2rem;
+  bottom: calc(15% + 1rem);
+  gap: 0.35rem;
+  padding: 0.34rem 0.42rem 0.34rem 0.58rem;
+  font-size: 0.68rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
 }
 
-.screenshot-card div {
+.screenshot-card .taskbar-demo .demo-cue-arrow {
+  width: 0.62rem;
+  height: 0.42rem;
+}
+
+.screenshot-card .taskbar-demo .demo-cue-arrow::after {
+  bottom: 0.06rem;
+  width: 0.34rem;
+  height: 0.34rem;
+  border-right-width: 0.1rem;
+  border-bottom-width: 0.1rem;
+}
+
+.screenshot-card .taskbar-demo .volume-target {
+  inset: auto 1rem 0.85rem;
+  height: 15%;
+  border-radius: 0.95rem;
+  box-shadow: 0 14px 28px -16px rgba(0, 0, 0, 0.18);
+}
+
+.screenshot-card .taskbar-demo .volume-target:focus-visible {
+  box-shadow:
+    0 14px 28px -16px rgba(0, 0, 0, 0.18),
+    0 0 0 2px rgba(125, 211, 252, 0.85);
+}
+
+.screenshot-card .taskbar-demo .taskbar-content {
+  padding-inline: 0.72rem;
+}
+
+.screenshot-card .taskbar-demo .taskbar-left,
+.screenshot-card .taskbar-demo .taskbar-right {
+  gap: 0.42rem;
+}
+
+.screenshot-card .taskbar-demo .taskbar-icon {
+  width: 1.28rem;
+  height: 1.28rem;
+}
+
+.screenshot-card .taskbar-demo .windows-mark {
+  width: 1.08rem;
+  height: 1.08rem;
+  gap: 0.05rem;
+}
+
+.screenshot-card .taskbar-demo .task-view-icon span {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 0.12rem;
+}
+
+.screenshot-card .taskbar-demo .task-view-icon span:first-child {
+  left: 0.08rem;
+  bottom: 0.07rem;
+}
+
+.screenshot-card .taskbar-demo .task-view-icon span:last-child {
+  top: 0.02rem;
+  right: 0.02rem;
+}
+
+.screenshot-card .taskbar-demo .explorer-icon {
+  border-radius: 0.14rem 0.14rem 0.24rem 0.24rem;
+}
+
+.screenshot-card .taskbar-demo .explorer-icon::before {
+  top: 0.03rem;
+  left: 0.1rem;
+  width: 0.68rem;
+  height: 0.28rem;
+  border-radius: 0.14rem 0.14rem 0 0;
+}
+
+.screenshot-card .taskbar-demo .explorer-icon::after {
+  right: 0.2rem;
+  bottom: 0.16rem;
+  left: 0.26rem;
+  height: 0.25rem;
+  border-radius: 0.08rem;
+}
+
+.screenshot-card .taskbar-demo .taskbar-lucide {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.screenshot-card .taskbar-demo .taskbar-right span {
+  min-width: 3.2rem;
+  font-size: 0.68rem;
+}
+
+.screenshot-card .taskbar-demo .volume-overlay {
+  bottom: calc(15% + 1rem);
+  width: min(58%, 10.5rem);
+  height: 2rem;
+  gap: 0.28rem;
+  padding-inline: 0.55rem;
+}
+
+.screenshot-card .taskbar-demo .volume-demo-icon,
+.screenshot-card .taskbar-demo .volume-demo-icon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.screenshot-card .taskbar-demo .volume-bar-row {
+  gap: 0.28rem;
+}
+
+.screenshot-card .taskbar-demo .volume-bar {
+  width: 0.24rem;
+  height: 1.05rem;
+}
+
+.screenshot-card .taskbar-demo .volume-percent {
+  min-width: 1.7rem;
+  font-size: 0.72rem;
+}
+
+.screenshot-card-copy {
   padding: 18px;
 }
 
@@ -1884,10 +2181,12 @@ html.site-document a {
 }
 
 .palette-chip {
+  appearance: none;
   display: grid;
   grid-template-columns: 34px minmax(0, 1fr);
   gap: 10px;
   align-items: center;
+  width: 100%;
   min-height: 48px;
   padding: 8px 10px;
   border: 2px solid var(--site-ink);
@@ -1897,6 +2196,29 @@ html.site-document a {
   color: var(--site-ink);
   font-size: 13px;
   font-weight: 850;
+  line-height: 1.15;
+  text-align: left;
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.palette-chip:hover,
+.palette-chip:focus-visible {
+  background: var(--site-soft);
+  outline: 3px solid var(--site-button-glow-strong);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--site-ink);
+}
+
+.palette-chip.is-selected {
+  background: var(--site-blue);
+  color: #ffffff;
+}
+
+.site.theme-solarized .palette-chip.is-selected {
+  color: #fdf6e3;
 }
 
 .command-list {
