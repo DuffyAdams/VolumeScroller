@@ -1059,14 +1059,680 @@ html.site-document a {
   padding: 0;
 }
 
-.hero-media img {
-  display: block;
+.taskbar-demo {
+  position: relative;
   width: 100%;
-  height: auto;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
   border: 2px solid var(--site-ink);
   border-radius: 8px;
-  background: #111111;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 74% 22%, rgba(56, 189, 248, 0.22), transparent 30%),
+    linear-gradient(145deg, #0f172a 0%, #111827 46%, #18181b 100%);
   box-shadow: 7px 8px 0 var(--site-ink);
+}
+
+.taskbar-demo::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 24%;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, black, transparent 74%);
+}
+
+.taskbar-wallpaper {
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 52% 46%, rgba(92, 195, 255, 0.95) 0 7%, transparent 18%),
+    radial-gradient(ellipse at 58% 30%, rgba(22, 93, 255, 0.95) 0 24%, transparent 47%),
+    radial-gradient(ellipse at 37% 52%, rgba(38, 175, 255, 0.8) 0 18%, transparent 43%),
+    radial-gradient(ellipse at 66% 67%, rgba(5, 43, 165, 0.92) 0 21%, transparent 48%),
+    conic-gradient(
+      from 218deg at 52% 46%,
+      transparent 0 10deg,
+      rgba(91, 196, 255, 0.8) 12deg 24deg,
+      rgba(24, 75, 255, 0.88) 32deg 80deg,
+      transparent 96deg 360deg
+    ),
+    conic-gradient(
+      from 31deg at 53% 48%,
+      transparent 0 30deg,
+      rgba(55, 148, 255, 0.7) 42deg 82deg,
+      rgba(5, 28, 127, 0.88) 94deg 128deg,
+      transparent 150deg 360deg
+    ),
+    linear-gradient(145deg, #06101e 0%, #07172a 55%, #020712 100%);
+  filter: blur(8px) saturate(1.25);
+  opacity: 0.76;
+  transform: scale(1.1) rotate(-7deg);
+}
+
+.taskbar-wallpaper::before,
+.taskbar-wallpaper::after {
+  content: "";
+  position: absolute;
+  inset: 8% 13% 2% 14%;
+  border: 7px solid rgba(73, 169, 255, 0.46);
+  border-bottom-color: rgba(25, 78, 244, 0.42);
+  border-left-color: rgba(91, 209, 255, 0.68);
+  border-radius: 48% 52% 45% 55% / 46% 42% 58% 54%;
+  box-shadow:
+    0 0 28px rgba(59, 130, 246, 0.34),
+    inset 0 0 30px rgba(25, 74, 255, 0.34);
+  transform: rotate(22deg);
+}
+
+.taskbar-wallpaper::after {
+  inset: 23% 22% 9% 24%;
+  border-width: 5px;
+  opacity: 0.78;
+  transform: rotate(-18deg);
+}
+
+.taskbar-target {
+  position: absolute;
+  inset: auto 18px 18px;
+  z-index: 2;
+  height: 24%;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  outline: 0;
+  background: rgba(17, 24, 39, 0.72);
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.32);
+  cursor: ns-resize;
+  backdrop-filter: blur(18px);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.taskbar-target:focus-visible {
+  border-color: rgba(125, 211, 252, 0.8);
+  box-shadow:
+    0 22px 46px rgba(0, 0, 0, 0.32),
+    0 0 0 4px rgba(56, 189, 248, 0.28);
+}
+
+.taskbar-left,
+.taskbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.taskbar-left {
+  min-width: 0;
+  gap: 14px;
+}
+
+.taskbar-right {
+  flex: 0 0 auto;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.taskbar-right span {
+  min-width: 66px;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--theme-font-windows11);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.taskbar-button {
+  position: relative;
+  width: clamp(28px, 6vw, 36px);
+  height: clamp(28px, 6vw, 36px);
+  flex: 0 0 auto;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 8px 18px rgba(0, 0, 0, 0.16);
+}
+
+.start-button {
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.windows-mark {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5px;
+}
+
+.windows-mark span {
+  background: linear-gradient(135deg, #6ee7ff, #1aa7ee);
+  box-shadow: 0 0 7px rgba(56, 189, 248, 0.28);
+}
+
+.task-view-button {
+  box-shadow: none;
+}
+
+.task-view-button span {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: linear-gradient(145deg, #f8fafc, #dbe4ee);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.08),
+    0 9px 16px rgba(0, 0, 0, 0.22);
+}
+
+.task-view-button span:first-child {
+  left: 2px;
+  bottom: 2px;
+  background: linear-gradient(145deg, #6b7280, #2f3540);
+  opacity: 0.86;
+}
+
+.task-view-button span:last-child {
+  top: 1px;
+  right: 1px;
+}
+
+.explorer-button {
+  border-radius: 4px 4px 6px 6px;
+  background:
+    linear-gradient(#e9a90e 0 28%, transparent 29%),
+    linear-gradient(180deg, #ffd44f 0%, #f8b82e 58%, #e6a11f 100%);
+}
+
+.explorer-button::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 15px;
+  height: 7px;
+  border-radius: 4px 4px 0 0;
+  background: #f4bd27;
+}
+
+.explorer-button::after {
+  content: "";
+  position: absolute;
+  right: 5px;
+  bottom: 4px;
+  left: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #38bdf8, #0369a1);
+}
+
+.taskbar-volume-overlay {
+  --volume-level: 82%;
+  position: absolute;
+  left: 50%;
+  bottom: 39%;
+  z-index: 3;
+  width: min(78%, 430px);
+  min-height: 104px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 26px;
+  opacity: 0;
+  background: rgba(11, 16, 36, 0.78);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.34);
+  transform: translate(-50%, 18px) scale(0.95);
+  pointer-events: none;
+  backdrop-filter: blur(14px);
+  transition:
+    opacity 220ms ease,
+    transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.taskbar-volume-overlay.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.taskbar-volume-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #ffffff;
+}
+
+.taskbar-volume-segments {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 7px;
+}
+
+.taskbar-volume-segments span {
+  width: 9px;
+  height: 44px;
+  flex: 1 1 0;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.34);
+  transform: scaleY(0.62);
+  transform-origin: bottom;
+  transition:
+    background-color 160ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.taskbar-volume-segments span.is-active {
+  background: linear-gradient(180deg, #7dd3fc, #0ea5e9);
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.34);
+  transform: scaleY(1);
+}
+
+.taskbar-volume-overlay strong {
+  min-width: 72px;
+  color: #ffffff;
+  font-family: var(--theme-font-windows11);
+  font-size: clamp(24px, 5vw, 42px);
+  font-weight: 900;
+  line-height: 1;
+  text-align: right;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.taskbar-demo.volume-demo {
+  background:
+    radial-gradient(circle at 74% 22%, rgba(56, 189, 248, 0.22), transparent 30%),
+    linear-gradient(145deg, #0f172a 0%, #111827 46%, #18181b 100%);
+}
+
+.taskbar-demo.volume-demo::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 24%;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, black, transparent 74%);
+}
+
+.taskbar-demo .volume-wallpaper {
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 52% 46%, rgba(92, 195, 255, 0.95) 0 7%, transparent 18%),
+    radial-gradient(ellipse at 58% 30%, rgba(22, 93, 255, 0.95) 0 24%, transparent 47%),
+    radial-gradient(ellipse at 37% 52%, rgba(38, 175, 255, 0.8) 0 18%, transparent 43%),
+    radial-gradient(ellipse at 66% 67%, rgba(5, 43, 165, 0.92) 0 21%, transparent 48%),
+    conic-gradient(
+      from 218deg at 52% 46%,
+      transparent 0 10deg,
+      rgba(91, 196, 255, 0.8) 12deg 24deg,
+      rgba(24, 75, 255, 0.88) 32deg 80deg,
+      transparent 96deg 360deg
+    ),
+    conic-gradient(
+      from 31deg at 53% 48%,
+      transparent 0 30deg,
+      rgba(55, 148, 255, 0.7) 42deg 82deg,
+      rgba(5, 28, 127, 0.88) 94deg 128deg,
+      transparent 150deg 360deg
+    ),
+    linear-gradient(145deg, #06101e 0%, #07172a 55%, #020712 100%);
+  filter: blur(8px) saturate(1.25);
+  opacity: 0.76;
+  transform: scale(1.1) rotate(-7deg);
+}
+
+.taskbar-demo .volume-wallpaper::before,
+.taskbar-demo .volume-wallpaper::after {
+  content: "";
+  position: absolute;
+  inset: 8% 13% 2% 14%;
+  border: 0.42rem solid rgba(73, 169, 255, 0.46);
+  border-bottom-color: rgba(25, 78, 244, 0.42);
+  border-left-color: rgba(91, 209, 255, 0.68);
+  border-radius: 48% 52% 45% 55% / 46% 42% 58% 54%;
+  box-shadow:
+    0 0 28px rgba(59, 130, 246, 0.34),
+    inset 0 0 30px rgba(25, 74, 255, 0.34);
+  transform: rotate(22deg);
+}
+
+.taskbar-demo .volume-wallpaper::after {
+  inset: 23% 22% 9% 24%;
+  border-width: 0.32rem;
+  opacity: 0.78;
+  transform: rotate(-18deg);
+}
+
+.taskbar-demo .demo-cue {
+  position: absolute;
+  left: clamp(2.2rem, 7vw, 3.55rem);
+  bottom: calc(18% + clamp(1.05rem, 4.2vw, 1.65rem));
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem 0.45rem 0.72rem;
+  border-radius: 999px;
+  opacity: 0;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.48);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  font-family: var(--theme-font-windows11);
+  font-size: clamp(0.72rem, 2.35vw, 0.88rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0;
+  pointer-events: none;
+  backdrop-filter: blur(12px);
+  transform: translateY(0.35rem);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.taskbar-demo .demo-cue.visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: demo-cue-float 1400ms ease-in-out infinite;
+}
+
+.taskbar-demo .demo-cue-arrow {
+  position: relative;
+  width: clamp(0.72rem, 2.4vw, 0.95rem);
+  height: clamp(0.48rem, 1.8vw, 0.62rem);
+  flex: 0 0 auto;
+}
+
+.taskbar-demo .demo-cue-arrow::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  border-color: rgba(255, 255, 255, 0.92);
+  bottom: 0.08rem;
+  width: 0.48rem;
+  height: 0.48rem;
+  border-right: 0.12rem solid;
+  border-bottom: 0.12rem solid;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.taskbar-demo .volume-target {
+  position: absolute;
+  inset: auto 0.75rem 0.75rem;
+  z-index: 2;
+  height: 18%;
+  min-height: 0;
+  border: 0;
+  border-radius: 1.35rem;
+  outline: 0;
+  background: rgba(43, 52, 70, 0.56);
+  box-shadow: 0 22px 44px -14px rgba(0, 0, 0, 0.2);
+  cursor: ns-resize;
+  backdrop-filter: blur(24px);
+  transition: box-shadow 200ms ease;
+}
+
+.taskbar-demo .volume-target:focus-visible {
+  box-shadow:
+    0 22px 44px -14px rgba(0, 0, 0, 0.2),
+    0 0 0 2px rgba(125, 211, 252, 0.95);
+}
+
+.taskbar-demo .taskbar-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 1rem;
+}
+
+.taskbar-demo .taskbar-left,
+.taskbar-demo .taskbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.taskbar-demo .taskbar-left {
+  min-width: 0;
+  gap: 0.625rem;
+}
+
+.taskbar-demo .taskbar-right {
+  flex: 0 0 auto;
+  gap: 0.625rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.taskbar-demo .taskbar-right span {
+  min-width: 4rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: var(--theme-font-windows11);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: right;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.taskbar-demo .taskbar-lucide {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.taskbar-demo .taskbar-icon {
+  position: relative;
+  z-index: 1;
+  width: clamp(1.65rem, 4.7vw, 2.15rem);
+  height: clamp(1.65rem, 4.7vw, 2.15rem);
+  flex: 0 0 auto;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 8px 18px rgba(0, 0, 0, 0.16);
+}
+
+.taskbar-demo .taskbar-start {
+  display: grid;
+  place-items: center;
+  background: transparent;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.taskbar-demo .windows-mark {
+  display: grid;
+  width: 1.85rem;
+  height: 1.85rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.08rem;
+}
+
+.taskbar-demo .windows-mark span {
+  background: linear-gradient(135deg, #6ee7ff, #1aa7ee);
+  box-shadow: 0 0 7px rgba(56, 189, 248, 0.28);
+}
+
+.taskbar-demo .task-view-icon {
+  border-radius: 0.45rem;
+  background: transparent;
+  box-shadow: none;
+}
+
+.taskbar-demo .task-view-icon span {
+  position: absolute;
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 0.18rem;
+  background: linear-gradient(145deg, #f8fafc, #dbe4ee);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.08),
+    0 0.55rem 1rem rgba(0, 0, 0, 0.22);
+}
+
+.taskbar-demo .task-view-icon span:first-child {
+  left: 0.13rem;
+  bottom: 0.12rem;
+  background: linear-gradient(145deg, #6b7280, #2f3540);
+  opacity: 0.86;
+}
+
+.taskbar-demo .task-view-icon span:last-child {
+  top: 0.03rem;
+  right: 0.03rem;
+}
+
+.taskbar-demo .explorer-icon {
+  border-radius: 0.18rem 0.18rem 0.32rem 0.32rem;
+  background:
+    linear-gradient(#e9a90e 0 28%, transparent 29%),
+    linear-gradient(180deg, #ffd44f 0%, #f8b82e 58%, #e6a11f 100%);
+}
+
+.taskbar-demo .explorer-icon::before {
+  content: "";
+  position: absolute;
+  top: 0.04rem;
+  left: 0.14rem;
+  width: 0.92rem;
+  height: 0.42rem;
+  border-radius: 0.18rem 0.18rem 0 0;
+  background: #f4bd27;
+}
+
+.taskbar-demo .explorer-icon::after {
+  content: "";
+  position: absolute;
+  right: 0.28rem;
+  bottom: 0.22rem;
+  left: 0.36rem;
+  height: 0.38rem;
+  border-radius: 0.12rem;
+  background: linear-gradient(180deg, #38bdf8, #0369a1);
+}
+
+.taskbar-demo .volume-overlay {
+  position: absolute;
+  bottom: calc(18% + 1.55rem);
+  left: 50%;
+  z-index: 3;
+  width: min(64%, 15.5rem);
+  height: clamp(2.15rem, 9.5vw, 3.7rem);
+  display: flex;
+  align-items: center;
+  gap: clamp(0.3rem, 1.15vw, 0.5rem);
+  padding-inline: clamp(0.55rem, 2vw, 1rem);
+  border-radius: 999px;
+  opacity: 0;
+  background: rgba(11, 16, 36, 0.56);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
+  pointer-events: none;
+  backdrop-filter: blur(12px);
+  transform: translateX(-50%) translateY(0.9rem) scale(0.94);
+  transition:
+    opacity 180ms ease,
+    transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.taskbar-demo .volume-overlay.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.taskbar-demo .volume-demo-icon {
+  position: relative;
+  z-index: 1;
+  width: clamp(1.35rem, 4.7vw, 1.85rem);
+  height: clamp(1.35rem, 4.7vw, 1.85rem);
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #ffffff;
+}
+
+.taskbar-demo .volume-demo-icon svg {
+  width: clamp(1.25rem, 4.35vw, 1.75rem);
+  height: clamp(1.25rem, 4.35vw, 1.75rem);
+}
+
+.taskbar-demo .volume-bar-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.taskbar-demo .volume-bar {
+  width: clamp(0.24rem, 1.25vw, 0.47rem);
+  height: clamp(1.1rem, 5.25vw, 2rem);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.taskbar-demo .volume-bar.active {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: scaleY(1.03);
+}
+
+.taskbar-demo .volume-percent {
+  position: relative;
+  z-index: 1;
+  min-width: clamp(1.75rem, 6.2vw, 2.75rem);
+  color: #ffffff;
+  font-family: var(--theme-font-windows11);
+  font-size: clamp(0.75rem, 2.9vw, 1.05rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: right;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.taskbar-demo .volume-overlay[data-pulse] .volume-demo-icon {
+  animation: volume-pop 180ms ease-out;
+}
+
+@keyframes demo-cue-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -0.18rem;
+  }
 }
 
 .quick-points {
@@ -1177,6 +1843,13 @@ html.site-document a {
   object-fit: cover;
   background: var(--site-soft);
   border-bottom: 2px solid var(--site-ink);
+}
+
+.screenshot-card .taskbar-demo {
+  border: 0;
+  border-bottom: 2px solid var(--site-ink);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .screenshot-card:nth-child(2) img {

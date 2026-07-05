@@ -1,4 +1,11 @@
-import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} from "react";
 import { Icon } from "@iconify/react";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
@@ -743,6 +750,188 @@ function VolumePreview({ preferences }: { preferences: Preferences }) {
   );
 }
 
+function TaskbarDemo() {
+  const [demoVolume, setDemoVolume] = useState(100);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(true);
+  const [isCueVisible, setIsCueVisible] = useState(true);
+  const [pulseKey, setPulseKey] = useState(0);
+  const [taskbarTime, setTaskbarTime] = useState(() => formatTaskbarTime());
+  const targetRef = useRef<HTMLDivElement>(null);
+  const hideTimer = useRef<number>();
+  const demoVolumeRef = useRef(demoVolume);
+  const volumeBars = Array.from({ length: 13 }, (_, index) => index);
+  const activeBars = Math.ceil((demoVolume / 100) * volumeBars.length);
+
+  function showOverlay() {
+    window.clearTimeout(hideTimer.current);
+    setIsOverlayVisible(true);
+    hideTimer.current = window.setTimeout(() => setIsOverlayVisible(false), 1700);
+  }
+
+  function updateVolume(nextVolume: number) {
+    setIsCueVisible(false);
+    setDemoVolume(clamp(nextVolume, 0, 100));
+    setPulseKey((current) => current + 1);
+    showOverlay();
+  }
+
+  function handleKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (!["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"].includes(event.key)) {
+      return;
+    }
+
+    event.preventDefault();
+    updateVolume(demoVolume + (event.key === "ArrowUp" || event.key === "ArrowRight" ? 5 : -5));
+  }
+
+  useEffect(() => {
+    demoVolumeRef.current = demoVolume;
+  }, [demoVolume]);
+
+  useEffect(() => {
+    const target = targetRef.current;
+
+    if (!target) {
+      return;
+    }
+
+    function handleWheel(event: WheelEvent) {
+      event.preventDefault();
+      event.stopPropagation();
+      updateVolume(demoVolumeRef.current + (event.deltaY < 0 ? 5 : -5));
+    }
+
+    target.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => target.removeEventListener("wheel", handleWheel);
+  }, []);
+
+  useEffect(() => {
+    showOverlay();
+    const interval = window.setInterval(() => setTaskbarTime(formatTaskbarTime()), 15_000);
+
+    return () => {
+      window.clearTimeout(hideTimer.current);
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div className="taskbar-demo volume-demo" aria-label="Interactive Volume Scroller taskbar demo">
+      <div className="volume-wallpaper" aria-hidden="true" />
+      <div className={`demo-cue ${isCueVisible ? "visible" : ""}`} aria-hidden="true">
+        <span>Try it here</span>
+        <span className="demo-cue-arrow" />
+      </div>
+      <div
+        ref={targetRef}
+        className="volume-target"
+        role="slider"
+        tabIndex={0}
+        aria-label="Scroll or use arrow keys to preview Volume Scroller"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={demoVolume}
+        onKeyDown={handleKeyDown}
+      >
+        <div className="taskbar-content">
+          <div className="taskbar-left" aria-hidden="true">
+            <span className="taskbar-icon taskbar-start">
+              <span className="windows-mark">
+                <span />
+                <span />
+                <span />
+                <span />
+              </span>
+            </span>
+
+            <span className="taskbar-icon task-view-icon">
+              <span />
+              <span />
+            </span>
+
+            <span className="taskbar-icon explorer-icon" />
+          </div>
+
+          <div className="taskbar-right" aria-hidden="true">
+            <WifiGlyph />
+            <VolumeGlyph size={18} />
+            <span>{taskbarTime}</span>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={`volume-overlay ${isOverlayVisible ? "visible" : ""}`}
+        style={{ "--volume-level": `${demoVolume}%` } as CSSProperties}
+        data-pulse={pulseKey}
+      >
+        <span className="volume-demo-icon" aria-hidden="true">
+          <VolumeGlyph size={42} strokeWidth={1.8} />
+        </span>
+
+        <div className="volume-bar-row" aria-hidden="true">
+          {volumeBars.map((barIndex) => (
+            <span key={barIndex} className={`volume-bar ${barIndex < activeBars ? "active" : ""}`} />
+          ))}
+        </div>
+
+        <span className="volume-percent">{demoVolume}%</span>
+      </div>
+    </div>
+  );
+}
+
+function WifiGlyph() {
+  return (
+    <svg
+      className="taskbar-lucide"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 20h.01" />
+      <path d="M2 8.82a15 15 0 0 1 20 0" />
+      <path d="M5 12.86a10 10 0 0 1 14 0" />
+      <path d="M8.5 16.43a5 5 0 0 1 7 0" />
+    </svg>
+  );
+}
+
+function VolumeGlyph({ size, strokeWidth = 2 }: { size: number; strokeWidth?: number }) {
+  return (
+    <svg
+      className="taskbar-lucide"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M11 5 6 9H2v6h4l5 4z" />
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+    </svg>
+  );
+}
+
+function formatTaskbarTime(date = new Date()) {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit"
+  }).format(date);
+}
+
 function ThemePicker({ value, onChange }: { value: ThemeName; onChange: (value: ThemeName) => void }) {
   return (
     <div className="theme-picker" role="radiogroup" aria-label="Theme palette">
@@ -769,10 +958,10 @@ function ThemePicker({ value, onChange }: { value: ThemeName; onChange: (value: 
 
 const screenshotItems = [
   {
-    src: "/screenshots/taskbar-volume-overlay.png",
     alt: "Volume Scroller overlay floating above the Windows taskbar",
     title: "Taskbar-first control",
-    copy: "Scroll over the Windows taskbar and the overlay appears exactly where you expect it."
+    copy: "Scroll over the Windows taskbar and the overlay appears exactly where you expect it.",
+    demo: true
   },
   {
     src: "/screenshots/volume-overlay-closeup.png",
@@ -845,7 +1034,7 @@ function LandingPage() {
         </div>
 
         <figure className="hero-media">
-          <img src="/screenshots/taskbar-volume-overlay.png" alt="Volume Scroller running above the Windows taskbar" />
+          <TaskbarDemo />
         </figure>
       </section>
 
@@ -890,7 +1079,7 @@ function LandingPage() {
         <div className="screenshot-grid">
           {screenshotItems.map((item) => (
             <article className="screenshot-card" key={item.title}>
-              <img src={item.src} alt={item.alt} />
+              {"demo" in item ? <TaskbarDemo /> : <img src={item.src} alt={item.alt} />}
               <div>
                 <h3>{item.title}</h3>
                 <p>{item.copy}</p>
