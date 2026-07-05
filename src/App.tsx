@@ -194,6 +194,10 @@ function App() {
     return <SettingsView preferences={preferences} setPreferences={setPreferences} />;
   }
 
+  if (!isTauri) {
+    return <LandingPage />;
+  }
+
   return <OverlayView preferences={preferences} />;
 }
 
@@ -760,6 +764,179 @@ function ThemePicker({ value, onChange }: { value: ThemeName; onChange: (value: 
         </button>
       ))}
     </div>
+  );
+}
+
+const screenshotItems = [
+  {
+    src: "/screenshots/taskbar-volume-overlay.png",
+    alt: "Volume Scroller overlay floating above the Windows taskbar",
+    title: "Taskbar-first control",
+    copy: "Scroll over the Windows taskbar and the overlay appears exactly where you expect it."
+  },
+  {
+    src: "/screenshots/volume-overlay-closeup.png",
+    alt: "Close-up of the rounded Volume Scroller volume overlay",
+    title: "Clean, glanceable feedback",
+    copy: "A compact always-on-top indicator shows volume level without stealing your focus."
+  },
+  {
+    src: "/screenshots/settings-window.png",
+    alt: "Volume Scroller settings window with behavior toggles and preview",
+    title: "Tweak every useful detail",
+    copy: "Tune speed, scroll direction, overlay size, position, startup behavior, tray behavior, and themes."
+  }
+];
+
+const featureItems = [
+  ["Scroll the taskbar", "Raise or lower the default output volume with vertical or horizontal wheel input."],
+  ["Windows-native audio", "A Tauri backend talks to the default render endpoint for immediate volume changes."],
+  ["Fullscreen aware", "Pause while gaming, presenting, or using fullscreen apps to avoid accidental changes."],
+  ["Tray ready", "Keep the app tucked away with tray actions for settings, update checks, and quitting."],
+  ["Precise overlay", "Choose the overlay scale, edge alignment, offsets, and hover behavior."],
+  ["Theme presets", "Use Monochrome, Windows 11, Ubuntu, or Solarized styles for the indicator and settings UI."]
+];
+
+function LandingPage() {
+  useEffect(() => {
+    document.documentElement.classList.add("site-document");
+    return () => document.documentElement.classList.remove("site-document");
+  }, []);
+
+  return (
+    <main className="site">
+      <header className="site-nav" aria-label="Primary">
+        <a className="brand" href="#top" aria-label="Volume Scroller home">
+          <span className="brand-mark" aria-hidden="true">
+            <img src={taskbarIconSrc} alt="" />
+          </span>
+          <span>scrolly</span>
+        </a>
+        <nav className="site-links">
+          <a href="#download">download</a>
+          <a href="#features">features</a>
+          <a href="#screenshots">screenshots</a>
+          <a href="https://github.com/DuffyAdams/VolumeScroller">github</a>
+        </nav>
+      </header>
+
+      <section className="hero" id="top">
+        <div className="hero-lockup">
+          <div className="mascot-volume" aria-hidden="true">
+            <Icon icon={volumeIcons.high} width="64" height="64" />
+          </div>
+          <div>
+            <p className="hero-kicker">Scrolly.DuffyAdams.com</p>
+            <h1>scroll taskbar, change volume</h1>
+            <p className="hero-copy">
+              A lightweight Windows utility for quick volume control with a clean overlay.
+            </p>
+          </div>
+        </div>
+
+        <div className="hero-actions" id="download">
+          <a className="download-button" href="https://github.com/DuffyAdams/VolumeScroller/releases">
+            <Icon icon="hugeicons:download-04" width="24" height="24" aria-hidden="true" />
+            <span>download for windows</span>
+          </a>
+          <a className="text-link" href="https://github.com/DuffyAdams/VolumeScroller">
+            source on github
+          </a>
+        </div>
+
+        <figure className="hero-media">
+          <img src="/screenshots/taskbar-volume-overlay.png" alt="Volume Scroller running above the Windows taskbar" />
+        </figure>
+      </section>
+
+      <section className="quick-points" aria-label="Highlights">
+        <article>
+          <h2>Free</h2>
+          <p>A focused utility for a tiny daily annoyance, built without subscription clutter.</p>
+        </article>
+        <article>
+          <h2>Open Source</h2>
+          <p>React, TypeScript, Rust, and Tauri, ready to inspect, fork, and improve.</p>
+        </article>
+        <article>
+          <h2>Windows First</h2>
+          <p>Designed around Windows 10 and Windows 11 taskbar behavior.</p>
+        </article>
+      </section>
+
+      <section className="section feature-section" id="features">
+        <div className="section-heading">
+          <p className="eyebrow">What it does</p>
+          <h2>Small surface, lots of control.</h2>
+        </div>
+        <div className="feature-grid">
+          {featureItems.map(([title, copy]) => (
+            <article className="feature-card" key={title}>
+              <span aria-hidden="true">
+                <Icon icon={volumeIcons.waveform} width="22" height="22" />
+              </span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section screenshots-section" id="screenshots">
+        <div className="section-heading">
+          <p className="eyebrow">Screenshots</p>
+          <h2>The app stays quiet until you need it.</h2>
+        </div>
+        <div className="screenshot-grid">
+          {screenshotItems.map((item) => (
+            <article className="screenshot-card" key={item.title}>
+              <img src={item.src} alt={item.alt} />
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.copy}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="theme-band" aria-label="Theme presets">
+        <div>
+          <p className="eyebrow">Palettes</p>
+          <h2>Monochrome by default, with presets when you want them.</h2>
+        </div>
+        <div className="palette-row">
+          {themeOptions.map((option) => (
+            <span className={`palette-chip theme-swatch-${option.value}`} key={option.value}>
+              <span className="theme-swatch" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </span>
+              {option.label}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      <section className="docs-band" id="docs">
+        <div>
+          <p className="eyebrow">Build it locally</p>
+          <h2>Made with Tauri 2, Rust, React, TypeScript, and Vite.</h2>
+        </div>
+        <div className="command-list" aria-label="Development commands">
+          <code>npm install</code>
+          <code>npm run dev</code>
+          <code>npm run tauri:dev</code>
+          <code>npm run tauri:build</code>
+        </div>
+      </section>
+
+      <footer className="site-footer">
+        <span>Volume Scroller</span>
+        <span>Scrolly.DuffyAdams.com</span>
+      </footer>
+    </main>
   );
 }
 
